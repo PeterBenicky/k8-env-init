@@ -1,3 +1,6 @@
+# Kubernetes dashboard
+
+## Deploy via argo cd
 ```
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -20,3 +23,5 @@ spec:
     syncOptions:
       - CreateNamespace=true
 ```
+## Get Token
+kubectl -n kubernetes-dashboard create token kubernetes-dashboard
