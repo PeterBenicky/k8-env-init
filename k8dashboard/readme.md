@@ -23,5 +23,17 @@ spec:
     syncOptions:
       - CreateNamespace=true
 ```
-## Get Token
+## How to access the dashboard
+- forward port
+```
+kubectl port-forward svc/kubernetes-dashboard -n kubernetes-dashboard 9000:443 &
+```
+- get the token
+```
 kubectl -n kubernetes-dashboard create token kubernetes-dashboard
+```
+
+- call the web url, note it must be https
+```
+https://127.0.0.1:9000
+```
