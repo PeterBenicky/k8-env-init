@@ -43,7 +43,7 @@ spec:
     # the port that this service should serve on
   - port: 8069
     targetPort: 8069
-    nodePort: 30081  
+    # nodePort: 30081  
   selector:
     app: odoo-server
 
