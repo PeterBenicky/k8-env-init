@@ -19,7 +19,8 @@ spec:
         controller:
           serviceType: NodePort  # or LoadBalancer
           nodePort: 32000        # Optional: Only if serviceType is NodePort
-          adminPassword: "admin" # Replace with a secure password or use a Secret
+          admin:
+            password: "admin" # Replace with a secure password or use a Secret
   sources: []
   project: default
   syncPolicy:
@@ -28,4 +29,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
 ```
