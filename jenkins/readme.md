@@ -20,3 +20,6 @@ spec:
     syncOptions:
       - CreateNamespace=true
 ```
+# Access
+localhost:32000
+pasword is in the log.
