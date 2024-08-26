@@ -42,25 +42,8 @@ spec:
   ports:
     # the port that this service should serve on
   - port: 8069
+    targetPort: 8069
+    nodePort: 30081  
   selector:
     app: odoo-server
 
----
-
-kind: Service
-apiVersion: v1
-metadata:
-  labels:
-    k8s-app: odoo-server
-  name: odoo-server
-  namespace: odoo-server
-spec:
-  type: NodePort
-  ports:
-    - port: 8069
-      targetPort: 8069
-      nodePort: 30081
-  selector:
-    k8s-app: kubernetes-dashboard  
-
----    
