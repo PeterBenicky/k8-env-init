@@ -1,9 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: odoo-server
   name: odoo-server
+  namespace: odoo
+
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: odoo-server
   template:
     metadata:
       labels:
@@ -32,7 +39,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: odoo-server
-  namespace: odoo-server
+  namespace: odoo
   labels:
     app: odoo-server
 spec:
