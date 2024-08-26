@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: odoo-server 
+  name: odoo-server
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: odoo-server 
+        app: odoo-server
     spec:
       containers:
-      - name: odoo-server 
+      - name: odoo-server
         image: odoo
         resources:
           requests:
