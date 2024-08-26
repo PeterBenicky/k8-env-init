@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: jenkins
+  name: devops-tools
   namespace: argocd
 spec:
   project: default
@@ -12,7 +12,7 @@ spec:
     path: ./jenkins
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: jenkins
+    namespace: devops-tools
   syncPolicy:
     automated:
       prune: true
