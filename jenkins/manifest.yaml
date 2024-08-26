@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.jenkins.io
+    chart: jenkins
+    targetRevision: "4.7.4"  # Specify the version you want to deploy, or use "latest"
+    helm:
+      valueFiles: []
+      values: | # You can specify inline Helm values here
+        controller:
+          adminPassword: "admin"  # Replace with a secure password or use a Secret
+          serviceType: ClusterIP  # Options: ClusterIP, NodePort, LoadBalancer
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jenkins
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
