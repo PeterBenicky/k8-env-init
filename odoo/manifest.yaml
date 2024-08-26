@@ -93,7 +93,7 @@ spec:
     spec:
       containers:
         - name: odoo
-          image: odoo:15
+          image: odoo:latest
           env:
             - name: HOST
               value: postgres
