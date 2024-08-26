@@ -12,7 +12,7 @@ spec:
     path: ./odoo
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: odoo-server
+    namespace: odoo
   syncPolicy:
     automated:
       prune: true
