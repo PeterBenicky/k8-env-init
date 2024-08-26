@@ -117,5 +117,5 @@ spec:
             httpGet:
               path: /
               port: 8069
-            initialDelaySeconds: 30
-            periodSeconds: 10
+            initialDelaySeconds: 120
+            periodSeconds: 20
