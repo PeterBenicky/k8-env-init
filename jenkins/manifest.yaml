@@ -60,7 +60,7 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - worker-node01
+          - docker-desktop
 ---
 
 apiVersion: v1
@@ -138,18 +138,20 @@ spec:
   
 ---
 
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  labels:
-    k8s-app: jenkins
-  name: jenkins
+  name: jenkins-service
   namespace: devops-tools
+  annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/path:   /
+      prometheus.io/port:   '8080'
 spec:
+  selector:
+    app: jenkins-server
   type: NodePort
   ports:
-    - port: 443
-      targetPort: 8443
-      nodePort: 30080
-  selector:
-    k8s-app: jenkins
+    - port: 8080
+      targetPort: 8080
+      nodePort: 32000
