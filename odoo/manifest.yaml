@@ -1,57 +1,121 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Namespace
 metadata:
-  labels:
-    app: odoo-server
-  name: odoo-server
+  name: odoo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
   namespace: odoo
-
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: odoo-server
-  template:
-    metadata:
-      labels:
-        app: odoo-server
-    spec:
-      containers:
-      - name: odoo-server
-        image: odoo
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-        env:
-        - name: DB_PORT_5432_TCP_ADDR
-          value: "localhost"
-        - name: DB_PORT_5432_TCP_PORT
-          value: "5432"
-        - name: DB_ENV_POSTGRES_USER
-          value: "odoo"
-        - name: DB_ENV_POSTGRES_PASSWORD
-          value: "1234"
-        ports:
-        - containerPort: 8069
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: odoo-server
+  name: postgres
   namespace: odoo
-  labels:
-    app: odoo-server
 spec:
-  # if your cluster supports it, uncomment the following to automatically create
-  # an external load-balanced IP for the frontend service.
-  # type: LoadBalancer
+  ports:
+    - name: postgres
+      port: 5432
+  selector:
+    app: postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: odoo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13
+          env:
+            - name: POSTGRES_USER
+              value: odoo
+            - name: POSTGRES_PASSWORD
+              value: odoo
+            - name: POSTGRES_DB
+              value: odoo
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-storage
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: odoo
+  namespace: odoo
+spec:
   type: NodePort
   ports:
-    # the port that this service should serve on
-  - port: 8069
-    targetPort: 8069
-    nodePort: 30081  
+    - name: odoo
+      port: 8069
+      nodePort: 30081
   selector:
-    app: odoo-server
- 
+    app: odoo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo
+  namespace: odoo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: odoo
+  template:
+    metadata:
+      labels:
+        app: odoo
+    spec:
+      containers:
+        - name: odoo
+          image: odoo:15
+          env:
+            - name: HOST
+              value: postgres
+            - name: PORT
+              value: "5432"
+            - name: USER
+              value: odoo
+            - name: PASSWORD
+              value: odoo
+            - name: DATABASE
+              value: odoo
+          ports:
+            - containerPort: 8069
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8069
+            initialDelaySeconds: 120
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8069
+            initialDelaySeconds: 30
+            periodSeconds: 10
