@@ -1,26 +1,33 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+# Copyright 2017 The Kubernetes Authors.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: Namespace
 metadata:
   name: jenkins
-spec:
-  project: default
-  source:
-    repoURL: https://charts.jenkins.io
-    chart: jenkins
-    targetRevision: "4.7.4"  # Specify the version you want to deploy, or use "latest"
-    helm:
-      valueFiles: []
-      values: | # You can specify inline Helm values here
-        controller:
-          adminPassword: "admin"  # Replace with a secure password or use a Secret
-          serviceType: ClusterIP  # Options: ClusterIP, NodePort, LoadBalancer
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: jenkins
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    k8s-app: jenkins
+  name: jenkins
+  namespace: jenkins
+
+---
 
 kind: Service
 apiVersion: v1
@@ -36,4 +43,36 @@ spec:
       targetPort: 8080
       nodePort: 30081
   selector:
-    k8s-app: jenkins 
+    k8s-app: jenkins  
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins
+  labels:
+    app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jenkins
+  template:
+    metadata:
+      labels:
+        app: jenkins
+    spec:
+      containers:
+        - name: jenkins
+          image: jenkins/jenkins:lts-jdk17
+          ports:
+            - containerPort: 8080  # Jenkins web interface
+            - containerPort: 50000 # Jenkins agent-to-controller connection
+          volumeMounts:
+            - name: jenkins-home
+              mountPath: /var/jenkins_home
+      volumes:
+        - name: jenkins-home
+          persistentVolumeClaim:
+            claimName: jenkins-pvc
