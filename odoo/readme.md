@@ -1,3 +1,4 @@
+```
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -18,6 +19,8 @@ spec:
   project: default
   syncPolicy:
     automated: null
+    
+```
 
 
 psql -h localhost -U admin -d aaa
