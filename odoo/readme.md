@@ -19,3 +19,6 @@ spec:
   syncPolicy:
     automated: null
 
+
+psql -h localhost -U admin -d aaa
+
