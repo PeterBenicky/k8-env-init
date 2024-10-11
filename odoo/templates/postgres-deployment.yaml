@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: postgres
-          image: postgres:10.1 # Sets Image
+          image: postgres:15 # Sets Image
           ports:
             - containerPort: 5432  # Exposes container port
           envFrom:
