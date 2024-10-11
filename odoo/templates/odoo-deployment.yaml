@@ -27,4 +27,6 @@ spec:
           value: admin
         - name: PASSWORD
           value: root
+        - name: DB_NAME
+          value: odoo_db
 

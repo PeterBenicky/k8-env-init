@@ -24,6 +24,7 @@ spec:
           volumeMounts:
             - mountPath: /var/customers/{{ .Values.namespace }}/postgresql/data
               name: postgredb
+          command: ["sh", "-c", "until psql -h postgres -U admin -c 'SELECT 1'; do echo waiting for postgres; sleep 2; done; psql -h postgres -U admin -c 'CREATE DATABASE odoo_db; CREATE USER odoo_user WITH PASSWORD 'root'; GRANT ALL PRIVILEGES ON DATABASE odoo_db TO odoo_user;'"]
       volumes:
         - name: postgredb
           persistentVolumeClaim:
