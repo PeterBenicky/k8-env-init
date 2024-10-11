@@ -19,7 +19,6 @@ spec:
   project: default
   syncPolicy:
     automated: null
-    
 ```
 
 
