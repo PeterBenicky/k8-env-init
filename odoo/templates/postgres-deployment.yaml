@@ -23,10 +23,16 @@ spec:
             - "sh"
             - "-c"
             - |
-              until psql -h localhost -U admin -c 'SELECT 1'; do echo waiting for postgres; sleep 2; done;
-              psql -h localhost -U admin -c "CREATE DATABASE odoo_db;"
-              psql -h localhost -U admin -c "CREATE USER odoo_user WITH PASSWORD 'root';"
-              psql -h localhost -U admin -c "GRANT ALL PRIVILEGES ON DATABASE odoo_db TO odoo_user;"
+              # Wait for PostgreSQL to become available
+              until pg_isready -h postgres -U admin; do
+                echo "Waiting for PostgreSQL to become available..."
+                sleep 2
+              done
+              
+              # Create database and user
+              psql -h postgres -U admin -c "CREATE DATABASE odoo_db;"
+              psql -h postgres -U admin -c "CREATE USER odoo_user WITH PASSWORD 'root';"
+              psql -h postgres -U admin -c "GRANT ALL PRIVILEGES ON DATABASE odoo_db TO odoo_user;"
       containers:
         - name: postgres
           image: postgres:15 # Sets Image
@@ -42,3 +48,4 @@ spec:
         - name: postgredb
           persistentVolumeClaim:
             claimName: postgresql-data-claim
+      restartPolicy: Always

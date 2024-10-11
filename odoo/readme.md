@@ -22,5 +22,3 @@ spec:
 ```
 
 
-psql -h localhost -U admin -d aaa
-
