@@ -21,9 +21,9 @@ spec:
           envFrom:
             - configMapRef:
                 name: postgres-config
-          volumeMounts:
-            - mountPath: /var/customers/{{ .Values.namespace }}/postgresql/data
-              name: postgredb
+          # volumeMounts:
+          #   - mountPath: /var/customers/{{ .Values.namespace }}/postgresql/data
+          #     name: postgredb
       volumes:
         - name: postgredb
           persistentVolumeClaim:

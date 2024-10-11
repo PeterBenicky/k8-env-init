@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: odoo
-        image: odoo:latest
+        image: odoo:18.0
         ports:
         - containerPort: 8069
         env:
@@ -27,6 +27,6 @@ spec:
           value: admin
         - name: PASSWORD
           value: root
-        # - name: DB_NAME
-        #   value: odoo_db
+        - name: DB_NAME
+          value: postgres
 

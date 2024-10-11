@@ -8,4 +8,4 @@ metadata:
 data:
   POSTGRES_USER: admin
   POSTGRES_PASSWORD: root
-  POSTGRES_DB: odoo_db
+  POSTGRES_DB: postgres
