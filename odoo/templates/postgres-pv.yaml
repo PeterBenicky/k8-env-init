@@ -1,8 +1,10 @@
 apiVersion: v1
 kind: PersistentVolume # Create a PV
 metadata:
-  name: postgresql-data # Sets PV's name
-  namespace: {{ .Values.namespace }}
+  # Valumes are in k8, som name must be unique, namespace is not relevant here
+  # it is  cluster-scoped resource
+  name: postgresql-data-{{ .Values.namespace }}
+  # namespace: {{ .Values.namespace }}
   labels:
     type: local # Sets PV's type to local
 spec:
@@ -12,4 +14,4 @@ spec:
   accessModes:
     - ReadWriteMany
   hostPath:
-    path: {{ .Values.namespace }} # Sets the volume's path
+    path: "/data/{{ .Values.namespace }}/volume" # Sets the volume's path
