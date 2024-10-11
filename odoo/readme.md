@@ -22,3 +22,4 @@ spec:
 ```
 
 
+kubectl exec -it postgres-589fc949fd-tnls6 -n odo13 -- /bin/bash
