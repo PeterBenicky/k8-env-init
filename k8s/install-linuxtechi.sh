@@ -22,8 +22,8 @@ sudo swapoff -a
 
 # if using k8s-master.local that inclkudes a dot, then DNS ia needed
 sudo hostnamectl set-hostname $HOSTNAME_MASTER     # Run on master node
-sudo hostnamectl set-hostname $HOSTNAME_WORKER01   # Run on 1st worker node
-sudo hostnamectl set-hostname $HOSTNAME_WORKER02    # Run on 2nd worker node
+# sudo hostnamectl set-hostname $HOSTNAME_WORKER01   # Run on 1st worker node
+# sudo hostnamectl set-hostname $HOSTNAME_WORKER02    # Run on 2nd worker node
 
 
 # ! run this on all workers
@@ -92,13 +92,13 @@ sudo apt update
 sudo apt install kubelet kubeadm kubectl -y
 sudo apt-mark hold kubelet kubeadm kubectl
 
-sudo bash -c  "cat <<EOF >> $KUBELET_CINFIG_FILE
-evictionHard:
-  imagefs.available: 1%
-  memory.available: 100Mi
-  nodefs.available: 1%
-  nodefs.inodesFree: 1%
-EOF"
+# sudo bash -c  "cat <<EOF >> $KUBELET_CINFIG_FILE
+# evictionHard:
+#  imagefs.available: 1%
+#  memory.available: 100Mi
+#  nodefs.available: 1%
+#  nodefs.inodesFree: 1%
+# EOF"
 
 
 cat <<EOF > kubelet.yaml
