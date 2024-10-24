@@ -12,10 +12,10 @@ HOST_LINES=(
 )
 KUBELET_CINFIG_FILE=/var/lib/kubelet/config.yaml
 
-su -
-apt update
-apt install sudo
-usermod -aG sudo $NONROOT_USER
+# su -
+# apt update
+# apt install sudo
+# usermod -aG sudo $NONROOT_USER
 # su - $NONROOT_USER
 
 sudo swapoff -a
